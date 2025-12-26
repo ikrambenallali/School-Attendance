@@ -1,5 +1,14 @@
+// import "dotenv/config";
+
+import dotenv from "dotenv";
+import path from "path";
+
+// charge explicitement le .env à la racine du projet (backend/.env)
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+// console.log("DATABASE_URL =", process.env.DATABASE_URL);
+
 import app from "./app";
-import "dotenv/config";
+
 
 const PORT = process.env.PORT || 3001;
 

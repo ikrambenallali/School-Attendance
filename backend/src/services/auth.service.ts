@@ -1,41 +1,37 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import  prisma  from "../lib/prisma";
+import prisma from "../lib/prisma";
 import { LoginDTO, AuthResponse } from "../types/auth";
 
 export const login = async (data: LoginDTO): Promise<AuthResponse> => {
-  console.log("hi");
-  
   const { email, password } = data;
-  
-  // const allUsers = await prisma.user.findMany();
-  // console.log("all uesers",allUsers);
 
+  // Cherche l'utilisateur par email
+  
   const user = await prisma.user.findUnique({ where: { email } });
   
-  console.log("USER FROM DB =", user);
-
+  
   if (!user) {
-    console.log("User not found!");
     throw new Error("Invalid credentials");
   }
 
+  // Vérifie le mot de passe
   const isPasswordValid = await bcrypt.compare(password, user.password);
-  console.log("PASSWORD VALID ?", isPasswordValid);
-
   if (!isPasswordValid) {
-    console.log("Password invalid!");
     throw new Error("Invalid credentials");
   }
 
+  // Génère le token JWT
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new Error("JWT_SECRET is not defined");
   }
 
-  const token = jwt.sign({ userId: user.id, role: user.role }, secret, {
-    expiresIn: process.env.JWT_EXPIRES_IN || "1d",
-  });
+  const token = jwt.sign(
+    { userId: user.id, role: user.role },
+    secret,
+    { expiresIn: process.env.JWT_EXPIRES_IN || "1d" }
+  );
 
   return {
     token,

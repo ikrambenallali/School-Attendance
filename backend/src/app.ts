@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import { checkDbConnection } from "./config/db";
+import userRoutes from './routes/userRoutes';
+
 
 import { prisma } from "./config/db";
 const app = express();
@@ -31,6 +33,8 @@ app.get("/tables", async (_req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use('/api/users', userRoutes);
+
 
 
 export default app;

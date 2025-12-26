@@ -1,17 +1,40 @@
-import { Pool } from "pg";
-import dotenv from "dotenv";
+// src/config/db.ts
+import { PrismaClient } from "@prisma/client";
+import { PrismaPg } from "@prisma/adapter-pg";
+import pg from "pg";
 
-dotenv.config();
+declare global {
+    var prisma: PrismaClient | undefined;
+}
 
-export const pool = new Pool({
-  host: process.env.DB_HOST,
-  port: Number(process.env.DB_PORT),
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  
+// Validate DATABASE_URL exists
+if (!process.env.DATABASE_URL) {
+    throw new Error("DATABASE_URL is not defined in environment variables");
+}
+
+const pool = new pg.Pool({
+    connectionString: process.env.DATABASE_URL,
 });
-pool
-  .query("SELECT NOW()")
-  .then(() => console.log("✅ Database connected"))
-  .catch((err) => console.error("❌ DB error", err));
+
+const adapter = new PrismaPg(pool);
+
+export const prisma =
+    global.prisma ??
+    new PrismaClient({
+        adapter,
+        log: ["query", "error", "warn"],
+    });
+
+if (process.env.NODE_ENV !== "production") {
+    global.prisma = prisma;
+}
+
+export async function checkDbConnection() {
+    try {
+        await prisma.$connect();
+        console.log("✅ Prisma connected to database");
+    } catch (error) {
+        console.error("❌ Prisma failed to connect to database", error);
+        throw error; // Re-throw to prevent server from continuing with bad connection
+    }
+}

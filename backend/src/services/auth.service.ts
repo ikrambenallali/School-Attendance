@@ -9,8 +9,7 @@ export const login = async (data: LoginDTO): Promise<AuthResponse> => {
   // Cherche l'utilisateur par email
   
   const user = await prisma.user.findUnique({ where: { email } });
-  
-  
+
   if (!user) {
     throw new Error("Invalid credentials");
   }

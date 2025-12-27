@@ -3,6 +3,7 @@ import cors from "cors";
 import authRoutes from "./routes/authRoutes";
 import { checkDbConnection } from "./config/db";
 import userRoutes from './routes/userRoutes';
+import classRoutes from './routes/classRoutes';
 
 
 import { prisma } from "./config/db";
@@ -34,6 +35,8 @@ app.get("/tables", async (_req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use('/api/users', userRoutes);
+app.use("/api/classes", classRoutes);
+
 
 
 

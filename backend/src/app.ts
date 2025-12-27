@@ -5,6 +5,7 @@ import { checkDbConnection } from "./config/db";
 import userRoutes from './routes/userRoutes';
 import classRoutes from './routes/classRoutes';
 import studentRoutes from './routes/studentRoutes';
+import subjectRoutes from './routes/subjectRoutes';
 
 
 import { prisma } from "./config/db";
@@ -38,6 +39,8 @@ app.use("/api/auth", authRoutes);
 app.use('/api/users', userRoutes);
 app.use("/api/classes", classRoutes);
 app.use("/api/students", studentRoutes);
+app.use("/api/subjects", subjectRoutes);
+
 
 
 

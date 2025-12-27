@@ -29,10 +29,23 @@ enum UserStatus {
   INACTIVE
 }
 
+model Student {
+  id        Int      @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String?  @unique
+  createdAt DateTime @default(now())
+
+  classId   Int
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+}
+
 model Class {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String
   level        String
   academicYear String
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
+
+  students     Student[]
 }

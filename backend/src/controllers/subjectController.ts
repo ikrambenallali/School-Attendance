@@ -86,7 +86,7 @@ export const subjectController = {
     const existing = await prisma.subject.findUnique({ where: { id } });
     if (!existing) {
       return res.status(404).json({ message: "Matière non trouvée" });
-    }
+    }6
 
     await prisma.subject.delete({ where: { id } });
 

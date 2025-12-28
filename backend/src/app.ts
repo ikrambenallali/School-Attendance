@@ -6,6 +6,7 @@ import userRoutes from './routes/userRoutes';
 import classRoutes from './routes/classRoutes';
 import studentRoutes from './routes/studentRoutes';
 import subjectRoutes from './routes/subjectRoutes';
+import sessionRoutes from './routes/sessionRoutes';
 
 
 import { prisma } from "./config/db";
@@ -40,6 +41,8 @@ app.use('/api/users', userRoutes);
 app.use("/api/classes", classRoutes);
 app.use("/api/students", studentRoutes);
 app.use("/api/subjects", subjectRoutes);
+app.use("/api/sessions", sessionRoutes);
+
 
 
 

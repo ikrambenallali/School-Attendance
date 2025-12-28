@@ -16,8 +16,7 @@ model User {
   role      Role
   status    UserStatus @default(ACTIVE)
 
-    sessions  Session[]  @relation("TeacherSessions") // <-- ajouter ceci
-
+  sessions Session[] @relation("TeacherSessions") // <-- ajouter ceci
 
   @@map("users")
 }
@@ -39,29 +38,28 @@ model Student {
   email     String?  @unique
   createdAt DateTime @default(now())
 
-  classId   Int
-  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  classId     Int
+  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  attendances Attendance[]
 }
 
 model Class {
-  id           Int       @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   name         String
   level        String
   academicYear String
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime @default(now())
 
-  students     Student[]
-    sessions     Session[] 
-
+  students Student[]
+  sessions Session[]
 }
 
 model Subject {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  code      String   @unique
-  createdAt DateTime @default(now())
-    sessions     Session[] // <-- ajouter ceci
-
+  code      String    @unique
+  createdAt DateTime  @default(now())
+  sessions  Session[] // <-- ajouter ceci
 }
 
 model Session {
@@ -74,12 +72,30 @@ model Session {
   subjectId Int
   teacherId Int
 
-  class     Class    @relation(fields: [classId], references: [id])
-  subject   Subject  @relation(fields: [subjectId], references: [id])
-  teacher   User     @relation("TeacherSessions", fields: [teacherId], references: [id])
+  class   Class   @relation(fields: [classId], references: [id])
+  subject Subject @relation(fields: [subjectId], references: [id])
+  teacher User    @relation("TeacherSessions", fields: [teacherId], references: [id])
 
-  createdAt DateTime @default(now())
+  attendances Attendance[]
+  createdAt   DateTime     @default(now())
 }
 
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
+  LATE
+  EXCUSED
+}
 
+model Attendance {
+  id        Int              @id @default(autoincrement())
+  sessionId Int
+  studentId Int
+  status    AttendanceStatus
+  createdAt DateTime         @default(now())
 
+  session Session @relation(fields: [sessionId], references: [id])
+  student Student @relation(fields: [studentId], references: [id])
+
+  @@unique([sessionId, studentId]) // pas de double présence
+}

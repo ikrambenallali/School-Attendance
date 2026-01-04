@@ -47,6 +47,8 @@ export const login = createAsyncThunk(
   }
 );
 
+
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -75,6 +77,9 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
+
+
+
   },
 });
 

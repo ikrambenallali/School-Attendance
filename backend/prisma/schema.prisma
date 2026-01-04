@@ -95,7 +95,8 @@ model Attendance {
   createdAt DateTime         @default(now())
 
   session Session @relation(fields: [sessionId], references: [id])
-  student Student @relation(fields: [studentId], references: [id])
 
-  @@unique([sessionId, studentId]) // pas de double présence
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, studentId])
 }

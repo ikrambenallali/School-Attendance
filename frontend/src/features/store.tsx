@@ -1,16 +1,29 @@
-import { configureStore } from '@reduxjs/toolkit';
-import authReducer from './auth/authSlice';
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
+import authReducer from "./auth/authSlice";
+import classReducer from "./classSlice";
+import studentsReducer from "./studentsSlice";
 
+
+const persistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["user", "token", "isAuthenticated"],
+};
+
+const persistedAuthReducer = persistReducer(persistConfig, authReducer);
 
 export const store = configureStore({
   reducer: {
-    auth: authReducer,
-  
+    auth: persistedAuthReducer,
+    class: classReducer,
+        students: studentsReducer,
+
   },
 });
 
-// Types pour TS
-// ReturnType<typeof store.getState> récupère le type que retourne cette fonction, donc l’état complet du store.
+export const persistor = persistStore(store);
+
 export type RootState = ReturnType<typeof store.getState>;
-// typeof store.getState récupère le type de cette fonction.
 export type AppDispatch = typeof store.dispatch;

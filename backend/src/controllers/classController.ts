@@ -3,7 +3,7 @@ import prisma from "../lib/prisma";
 import { CreateClassDTO, UpdateClassDTO } from "../types/class.types";
 
 export const classController = {
-  // GET /api/classes
+  
   async getAll(req: Request, res: Response) {
     const classes = await prisma.class.findMany({
       orderBy: { createdAt: "desc" },
@@ -12,7 +12,6 @@ export const classController = {
     res.json(classes);
   },
 
-  // GET /api/classes/:id
   async getOne(req: Request, res: Response) {
     const id = Number(req.params.id);
 
@@ -27,7 +26,6 @@ export const classController = {
     res.json(classe);
   },
 
-  // POST /api/classes
   async create(req: Request, res: Response) {
     const { name, level, academicYear } = req.body as CreateClassDTO;
 
@@ -42,7 +40,6 @@ export const classController = {
     res.status(201).json(classe);
   },
 
-  // PUT /api/classes/:id
   async update(req: Request, res: Response) {
     const id = Number(req.params.id);
     const data = req.body as UpdateClassDTO;
@@ -60,7 +57,6 @@ export const classController = {
     res.json(updated);
   },
 
-  // DELETE /api/classes/:id
   async remove(req: Request, res: Response) {
     const id = Number(req.params.id);
 

@@ -3,9 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 import {api} from "../api/api"
 
-/* =======================
-   TYPES
-======================= */
+
 
 export interface Class {
   id: number;

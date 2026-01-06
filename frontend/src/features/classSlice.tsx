@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
+
+// PayloadAction => C’est le type de l’objet action que Redux envoie au reducer.
 // import api from "api";
 import {api} from "../api/api.ts"
 
@@ -76,7 +78,7 @@ export const deleteClass = createAsyncThunk(
   "class/delete",
   async (id: number) => {
     await api.delete(`/classes/${id}`);
-    return id; // retourner l'ID pour supprimer du state
+    return id; 
   }
 );
 

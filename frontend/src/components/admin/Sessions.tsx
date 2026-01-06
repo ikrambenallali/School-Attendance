@@ -3,10 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../../features/store";
 import { fetchSessions, createSession, clearError } from "../../features/sessionSlice";
 import type { CreateSessionDTO } from "../../features/sessionSlice";
+import { useNavigate } from "react-router-dom";
+
 
 const Sessions: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { sessions, loading, error } = useSelector((state: RootState) => state.session);
+const navigate = useNavigate();
 
   const [form, setForm] = useState<CreateSessionDTO>({
     date: "",
@@ -245,6 +248,8 @@ const Sessions: React.FC = () => {
                     <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Classe</th>
                     <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Matière</th>
                     <th className="px-6 py-4 text-left text-sm font-bold text-gray-700">Enseignant</th>
+                    <th className="px-6 py-4">Actions</th>
+
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -286,8 +291,21 @@ const Sessions: React.FC = () => {
                           {session.teacher?.name}
                         </span>
                       </td>
+                      <td className="px-6 py-4">
+  <button
+    onClick={() =>
+      navigate(`/admin/sessions/${session.id}/attendance`)
+    }
+    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+  >
+    Présence
+  </button>
+</td>
+
                     </tr>
+                    
                   ))}
+                  
                 </tbody>
               </table>
             </div>

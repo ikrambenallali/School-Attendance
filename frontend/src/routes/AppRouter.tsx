@@ -9,6 +9,7 @@ import Class from '../components/admin/Class';
 import Student from '../components/admin/Student';
 import Subjects from '../components/admin/Subjects';
 import Sessions from '../components/admin/Sessions';
+import AttendancePage from '../components/admin/AttendancePage';
 
 const AppRouter: React.FC = () => {
   return (
@@ -23,6 +24,7 @@ const AppRouter: React.FC = () => {
         <Route path="students" element={<Student />}/>
         <Route path="subjects" element={<Subjects />}/>
         <Route path="sessions" element={<Sessions />} />
+<Route path="sessions/:sessionId/attendance" element={<AttendancePage  />} />
       
       </Route>
 

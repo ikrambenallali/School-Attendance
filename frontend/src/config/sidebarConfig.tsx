@@ -9,7 +9,7 @@ export const sidebarConfig: Record<"ADMIN" | "TEACHER", SidebarItem[]> = {
     { label: "Étudiants", path: "/admin/students", icon: <FaUsers /> },
     { label: "Matières", path: "/admin/subjects", icon: <FaBook /> },
     { label: "Séances", path: "/admin/sessions", icon: <FaCalendarCheck /> },
-    { label: "Présences", path: "/admin/attendance", icon: <FaCalendarCheck /> },
+    // { label: "Présences", path: "/admin/sessions/:sessionId/attendance", icon: <FaCalendarCheck /> },
   ],
 
   TEACHER: [

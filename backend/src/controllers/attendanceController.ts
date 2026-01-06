@@ -51,17 +51,28 @@ export const createAttendance = async (req: Request, res: Response) => {
     }
 
 
-    const createdAttendances = await prisma.$transaction(
-      attendances.map((a) =>
-        prisma.attendance.create({
-          data: {
-            sessionId,
-            studentId: a.studentId,
-            status: a.status,
-          },
-        })
-      )
-    );
+  const createdAttendances = await prisma.$transaction(
+  attendances.map((a) =>
+    prisma.attendance.upsert({
+      where: {
+        // 🔹 Assurez-vous d’avoir un index unique sur sessionId + studentId
+        sessionId_studentId: {
+          sessionId: sessionId,
+          studentId: a.studentId,
+        },
+      },
+      update: {
+        status: a.status,
+      },
+      create: {
+        sessionId,
+        studentId: a.studentId,
+        status: a.status,
+      },
+    })
+  )
+);
+
 
     res.status(201).json(createdAttendances);
   } catch (error: any) {
@@ -78,9 +89,43 @@ export const createAttendance = async (req: Request, res: Response) => {
 };
 
 export const getAttendanceBySession = async (req: Request, res: Response) => {
-  const sessionId = Number(req.params.sessionId);
-  const attendances = await attendanceService.getAttendanceBySession(sessionId);
-  res.json(attendances);
+  try {
+console.log("req.params.sessionId:", req.params.sessionId);
+const sessionId = Number(req.params.sessionId);
+console.log("sessionId après Number():", sessionId);
+    console.log("sessionId reçu:", sessionId);
+
+    if (isNaN(sessionId)) {
+      return res.status(400).json({ message: "sessionId invalide" });
+    }
+
+    //  Récupérer la session et sa classe avec les étudiants
+    const session = await prisma.session.findUnique({
+      where: { id: sessionId },
+      include: {
+        class: {
+          include: { students: true }
+        }
+      }
+    });
+
+    if (!session) {
+      return res.status(404).json({ message: "Session non trouvée" });
+    }
+
+    //  Récupérer les présences pour cette session
+    const attendances = await prisma.attendance.findMany({
+      where: { sessionId },
+      include: {
+        student: true
+      }
+    });
+
+    return res.json(attendances);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Erreur serveur" });
+  }
 };
 
 

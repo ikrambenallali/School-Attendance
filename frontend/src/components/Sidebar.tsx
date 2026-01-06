@@ -216,7 +216,6 @@ const Sidebar = () => {
       </div>
 
       {/* Decorative Element */}
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-yellow-400 via-sky-400 to-yellow-400"></div>
     </aside>
   );
 };

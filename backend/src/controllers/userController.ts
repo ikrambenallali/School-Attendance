@@ -2,9 +2,8 @@ import { Request, Response } from 'express';
 import {prisma} from '../config/db';
 import bcrypt from 'bcryptjs';
 
-/**
- * GET /api/users
- */
+
+ 
 export const getAllUsers = async (req: Request, res: Response) => {
   const users = await prisma.user.findMany({
     select: {
@@ -20,9 +19,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
   res.json(users);
 };
 
-/**
- * GET /api/users/:id
- */
+
 export const getUserById = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
 
@@ -35,9 +32,7 @@ export const getUserById = async (req: Request, res: Response) => {
   res.json(user);
 };
 
-/**
- * POST /api/users
- */
+
 export const createUser = async (req: Request, res: Response) => {
   const { name, email, password, role } = req.body;
 
@@ -55,9 +50,7 @@ export const createUser = async (req: Request, res: Response) => {
   res.status(201).json(user);
 };
 
-/**
- * PUT /api/users/:id
- */
+
 export const updateUser = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
   const { name, email, role, status } = req.body;
@@ -70,9 +63,6 @@ export const updateUser = async (req: Request, res: Response) => {
   res.json(user);
 };
 
-/**
- * DELETE /api/users/:id
- */
 export const deleteUser = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
 

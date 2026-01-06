@@ -6,7 +6,6 @@ import { LoginDTO, AuthResponse } from "../types/auth";
 export const login = async (data: LoginDTO): Promise<AuthResponse> => {
   const { email, password } = data;
 
-  // Cherche l'utilisateur par email
   
   const user = await prisma.user.findUnique({ where: { email } });
 
@@ -14,13 +13,11 @@ export const login = async (data: LoginDTO): Promise<AuthResponse> => {
     throw new Error("Invalid credentials");
   }
 
-  // Vérifie le mot de passe
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
     throw new Error("Invalid credentials");
   }
 
-  // Génère le token JWT
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new Error("JWT_SECRET is not defined");

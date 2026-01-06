@@ -8,9 +8,7 @@ export const createAttendance = async (req: Request, res: Response) => {
   try {
     const { sessionId, attendances } = req.body as CreateAttendanceDTO;
 
-    /* =====================
-       VALIDATION BASIQUE
-    ====================== */
+  
 
     if (!sessionId || !Array.isArray(attendances) || attendances.length === 0) {
       return res.status(400).json({
@@ -18,9 +16,6 @@ export const createAttendance = async (req: Request, res: Response) => {
       });
     }
 
-    /* =====================
-       VÉRIFIER SÉANCE
-    ====================== */
 
     const session = await prisma.session.findUnique({
       where: { id: sessionId },
@@ -37,9 +32,6 @@ export const createAttendance = async (req: Request, res: Response) => {
 
     const classStudentIds = session.class.students.map((s) => s.id);
 
-    /* =====================
-       VALIDATION PAR ÉLÈVE
-    ====================== */
 
     for (const attendance of attendances) {
       if (
@@ -58,9 +50,6 @@ export const createAttendance = async (req: Request, res: Response) => {
       }
     }
 
-    /* =====================
-       CRÉATION (transaction)
-    ====================== */
 
     const createdAttendances = await prisma.$transaction(
       attendances.map((a) =>
@@ -94,9 +83,7 @@ export const getAttendanceBySession = async (req: Request, res: Response) => {
   res.json(attendances);
 };
 
-/**
- * GET /attendance/by-student/:studentId
- */
+
 export const getAttendanceByStudent = async (req: Request, res: Response) => {
   try {
     const studentId = Number(req.params.studentId);
@@ -128,9 +115,7 @@ export const getAttendanceByStudent = async (req: Request, res: Response) => {
   }
 };
 
-/**
- * GET /attendance/by-class/:classId
- */
+
 export const getAttendanceByClass = async (req: Request, res: Response) => {
   try {
     const classId = Number(req.params.classId);
@@ -168,9 +153,7 @@ export const getAttendanceByClass = async (req: Request, res: Response) => {
   }
 };
 
-/**
- * GET /attendance/by-period?start=YYYY-MM-DD&end=YYYY-MM-DD
- */
+
 export const getAttendanceByPeriod = async (req: Request, res: Response) => {
   try {
     const { start, end } = req.query;

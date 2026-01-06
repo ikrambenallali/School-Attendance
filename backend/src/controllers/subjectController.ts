@@ -3,7 +3,7 @@ import prisma from "../lib/prisma";
 import { CreateSubjectDTO, UpdateSubjectDTO } from "../types/subject.types";
 
 export const subjectController = {
-  // GET /api/subjects
+
   async getAll(req: Request, res: Response) {
     const subjects = await prisma.subject.findMany({
       orderBy: { createdAt: "desc" },
@@ -12,7 +12,6 @@ export const subjectController = {
     res.json(subjects);
   },
 
-  // GET /api/subjects/:id
   async getOne(req: Request, res: Response) {
     const id = Number(req.params.id);
 
@@ -27,7 +26,6 @@ export const subjectController = {
     res.json(subject);
   },
 
-  // POST /api/subjects
   async create(req: Request, res: Response) {
     const { name, code } = req.body as CreateSubjectDTO;
 
@@ -35,7 +33,6 @@ export const subjectController = {
       return res.status(400).json({ message: "Champs manquants" });
     }
 
-    // vérifier unicité du code
     const exists = await prisma.subject.findUnique({
       where: { code },
     });
@@ -51,7 +48,6 @@ export const subjectController = {
     res.status(201).json(subject);
   },
 
-  // PUT /api/subjects/:id
   async update(req: Request, res: Response) {
     const id = Number(req.params.id);
     const data = req.body as UpdateSubjectDTO;
@@ -79,14 +75,13 @@ export const subjectController = {
     res.json(updated);
   },
 
-  // DELETE /api/subjects/:id
   async remove(req: Request, res: Response) {
     const id = Number(req.params.id);
 
     const existing = await prisma.subject.findUnique({ where: { id } });
     if (!existing) {
       return res.status(404).json({ message: "Matière non trouvée" });
-    }6
+    }
 
     await prisma.subject.delete({ where: { id } });
 

@@ -3,7 +3,6 @@ import prisma from "../lib/prisma";
 import { CreateStudentDTO, UpdateStudentDTO } from "../types/student.types";
 
 export const studentController = {
-  // GET /api/students
   async getAll(req: Request, res: Response) {
     const students = await prisma.student.findMany({
       include: {
@@ -14,7 +13,6 @@ export const studentController = {
     res.json(students);
   },
 
-  // GET /api/students/:id
   async getOne(req: Request, res: Response) {
     const id = Number(req.params.id);
 
@@ -30,7 +28,6 @@ export const studentController = {
     res.json(student);
   },
 
-  // POST /api/students
   async create(req: Request, res: Response) {
     const { firstName, lastName, email, classId } =
       req.body as CreateStudentDTO;
@@ -39,7 +36,6 @@ export const studentController = {
       return res.status(400).json({ message: "Champs manquants" });
     }
 
-    // Vérifier que la classe existe
     const classe = await prisma.class.findUnique({
       where: { id: classId },
     });
@@ -60,7 +56,6 @@ export const studentController = {
     res.status(201).json(student);
   },
 
-  // PUT /api/students/:id
   async update(req: Request, res: Response) {
     const id = Number(req.params.id);
     const data = req.body as UpdateStudentDTO;
@@ -88,7 +83,6 @@ export const studentController = {
     res.json(updated);
   },
 
-  // DELETE /api/students/:id
   async remove(req: Request, res: Response) {
     const id = Number(req.params.id);
 

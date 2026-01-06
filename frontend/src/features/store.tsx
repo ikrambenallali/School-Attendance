@@ -14,6 +14,7 @@ import authReducer from "./auth/authSlice";
 import classReducer from "./classSlice";
 import studentsReducer from "./studentsSlice";
 import subjectReducer from "./subjectSlice";  
+import sessionReducer from "./sessionSlice";
 
 const persistConfig = {
   key: "auth",
@@ -29,6 +30,7 @@ export const store = configureStore({
     class: classReducer,
     students: studentsReducer,
     subject: subjectReducer,
+    session: sessionReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

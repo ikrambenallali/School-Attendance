@@ -55,7 +55,6 @@ export const createAttendance = async (req: Request, res: Response) => {
   attendances.map((a) =>
     prisma.attendance.upsert({
       where: {
-        // 🔹 Assurez-vous d’avoir un index unique sur sessionId + studentId
         sessionId_studentId: {
           sessionId: sessionId,
           studentId: a.studentId,
@@ -90,10 +89,10 @@ export const createAttendance = async (req: Request, res: Response) => {
 
 export const getAttendanceBySession = async (req: Request, res: Response) => {
   try {
-console.log("req.params.sessionId:", req.params.sessionId);
-const sessionId = Number(req.params.sessionId);
-console.log("sessionId après Number():", sessionId);
-    console.log("sessionId reçu:", sessionId);
+// console.log("req.params.sessionId:", req.params.sessionId);
+  const sessionId = Number(req.params.sessionId);
+// console.log("sessionId après Number():", sessionId);
+    // console.log("sessionId reçu:", sessionId);
 
     if (isNaN(sessionId)) {
       return res.status(400).json({ message: "sessionId invalide" });
